@@ -4373,6 +4373,15 @@ ngx_http_core_listen(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 #endif
         }
 
+        /**
+         * linux tcp的keepalive
+         * 一个TCP套接口创建后默认是没有开启keepalive选项的，要使用setsockopt()函数来开启。
+         * 开启后默认使用全局设置可更改/etc/sysctl.conf,加上:
+          net.ipv4.tcp_keepalive_intvl = 20
+          net.ipv4.tcp_keepalive_probes = 3
+          net.ipv4.tcp_keepalive_time = 60
+          可以使用setsockopt()修改
+         */
         if (ngx_strncmp(value[n].data, "so_keepalive=", 13) == 0) {
 
             if (ngx_strcmp(&value[n].data[13], "on") == 0) {

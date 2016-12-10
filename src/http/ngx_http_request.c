@@ -956,15 +956,15 @@ ngx_http_process_request_line(ngx_event_t *rev)
     for ( ;; ) {
 
         if (rc == NGX_AGAIN) {
-			// 从请求中读取请求头
-            n = ngx_http_read_request_header(r);
+			// 从连接中读取内容，放到header_in buf中,返回读取字节数，或错误码  
+             n = ngx_http_read_request_header(r);
 
             if (n == NGX_AGAIN || n == NGX_ERROR) {
                 return;
             }
         }
 
-		// 解析请求行
+		// 状态机解析请求行,将method  schema host port uri  protocol version 分离出来
         rc = ngx_http_parse_request_line(r, r->header_in);
 
         if (rc == NGX_OK) {
